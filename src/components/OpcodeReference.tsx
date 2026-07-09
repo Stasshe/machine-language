@@ -25,10 +25,10 @@ function syntaxFor(code: number, mnemonic: string): string {
 export default function OpcodeReference() {
   return (
     <details
-      className="lg:h-full flex flex-col bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4"
+      className="lg:h-full flex flex-col bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4"
       open
     >
-      <summary className="shrink-0 font-panel uppercase tracking-widest text-xs text-ink/70 cursor-pointer select-none">
+      <summary className="shrink-0 font-panel uppercase tracking-widest text-xs text-ink font-semibold cursor-pointer select-none">
         Opcode Table — 4bit + 4bit×3
       </summary>
       <div className="mt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
@@ -36,15 +36,15 @@ export default function OpcodeReference() {
           {OPCODES.map((op) => (
             <div
               key={`${op.code}-${op.mnemonic}`}
-              className="border-t border-amber-dim/15 first:border-t-0 py-1"
+              className="border-t border-amber-dim first:border-t-0 py-1"
             >
               <div className="flex items-baseline gap-2">
-                <span className="text-amber w-3 shrink-0">
+                <span className="text-amber w-3 shrink-0 font-bold">
                   {op.code.toString(16).toUpperCase()}
                 </span>
-                <span className="text-head">{syntaxFor(op.code, op.mnemonic)}</span>
+                <span className="text-head font-semibold">{syntaxFor(op.code, op.mnemonic)}</span>
               </div>
-              <p className="text-ink/60 pl-5 leading-snug">
+              <p className="text-ink/80 pl-5 leading-snug">
                 {op.what}
                 {op.to}
                 {op.action}

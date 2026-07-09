@@ -27,16 +27,16 @@ export default function MemoryTape({ vm }: Props) {
   }, [pc]);
 
   return (
-    <div className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4">
+    <div className="bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4">
       <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-        <h2 className="font-panel uppercase tracking-widest text-xs text-ink/70">
+        <h2 className="font-panel uppercase tracking-widest text-xs text-ink font-semibold">
           Memory Tape — 00H – FFH
         </h2>
-        <span className="hidden sm:block font-panel text-[10px] uppercase tracking-wider text-ink/50">
+        <span className="hidden sm:block font-panel text-[10px] uppercase tracking-wider text-ink/70">
           scroll to inspect
         </span>
       </div>
-      <div className="relative overflow-x-auto rounded bg-chassis/70 py-1">
+      <div className="relative overflow-x-auto overflow-y-hidden rounded bg-chassis py-1">
         <div className="sprocket-row h-2" />
         <div className="flex">
           {cells.map((val, addr) => {
@@ -48,7 +48,7 @@ export default function MemoryTape({ vm }: Props) {
                 // biome-ignore lint/suspicious/noArrayIndexKey: addr is a fixed memory address, not a reorderable index
                 key={addr}
                 ref={addr === pc ? headRef : undefined}
-                className="relative flex-none w-7 sm:w-9 flex flex-col items-center justify-center border-r border-amber-dim/20 py-1 sm:py-1.5"
+                className="relative flex-none w-7 sm:w-9 flex flex-col items-center justify-center border-r-2 border-amber-dim py-1 sm:py-1.5"
               >
                 {isPc && (
                   <div className="absolute -top-1.5 left-0 right-0 h-0.5 bg-head glow-amber" />
@@ -60,20 +60,22 @@ export default function MemoryTape({ vm }: Props) {
                       : isTouched
                         ? "text-amber glow-amber"
                         : val
-                          ? "text-ink/70"
-                          : "text-ink/25"
+                          ? "text-ink"
+                          : "text-ink/40"
                   }`}
                 >
                   {hexByte(val)}
                 </span>
-                <span className="font-panel text-[9px] text-ink/35 leading-none mt-0.5">
+                <span className="font-panel text-[9px] text-ink/60 leading-none mt-0.5">
                   {hexByte(addr)}
                 </span>
-                {isFF && (
-                  <span className="absolute -bottom-4 font-panel text-[9px] uppercase tracking-wider text-danger">
-                    in
-                  </span>
-                )}
+                <span
+                  className={`font-panel text-[9px] uppercase tracking-wider leading-none h-3 font-bold ${
+                    isFF ? "text-danger" : "invisible"
+                  }`}
+                >
+                  in
+                </span>
               </div>
             );
           })}

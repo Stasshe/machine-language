@@ -86,23 +86,25 @@ export default function Home() {
           />
         </div>
 
-        <div className="self-start lg:col-start-3">
-          <RegisterBank vm={vm} />
-        </div>
-        <div className="self-start lg:col-start-3">
-          <ControlPanel
-            ffInput={ffInput}
-            onFfInputChange={setFfInput}
-            onAssemble={handleAssemble}
-            onStep={handleStep}
-            onRunToggle={() => setRunning((r) => !r)}
-            onReset={handleReset}
-            running={running}
-            speedMs={speedMs}
-            onSpeedChange={setSpeedMs}
-            vm={vm}
-            hasAssembleErrors={!assembleResult.ok}
-          />
+        <div className="min-h-0 lg:col-start-3 lg:row-span-2 flex flex-col gap-2 sm:gap-3 lg:gap-4">
+          <div className="min-h-0 lg:flex-1">
+            <RegisterBank vm={vm} />
+          </div>
+          <div className="shrink-0">
+            <ControlPanel
+              ffInput={ffInput}
+              onFfInputChange={setFfInput}
+              onAssemble={handleAssemble}
+              onStep={handleStep}
+              onRunToggle={() => setRunning((r) => !r)}
+              onReset={handleReset}
+              running={running}
+              speedMs={speedMs}
+              onSpeedChange={setSpeedMs}
+              vm={vm}
+              hasAssembleErrors={!assembleResult.ok}
+            />
+          </div>
         </div>
 
         <div className="self-start md:col-span-2 lg:col-span-3">

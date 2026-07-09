@@ -15,9 +15,11 @@ export default function RegisterBank({ vm }: Props) {
   );
 
   return (
-    <div className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4">
-      <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-        <h2 className="font-panel uppercase tracking-widest text-xs text-ink/70">Register Bank</h2>
+    <div className="h-full flex flex-col bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4">
+      <div className="shrink-0 flex items-center justify-between mb-1.5 sm:mb-2">
+        <h2 className="font-panel uppercase tracking-widest text-xs text-ink font-semibold">
+          Register Bank
+        </h2>
         <div className="flex items-center gap-2">
           <span
             className={`h-2.5 w-2.5 rounded-full ${
@@ -25,36 +27,38 @@ export default function RegisterBank({ vm }: Props) {
             }`}
             title="HALT"
           />
-          <span className="font-panel text-xs uppercase tracking-widest text-ink/70">Halt</span>
+          <span className="font-panel text-xs uppercase tracking-widest text-ink/80">Halt</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-1 sm:gap-1.5 lg:gap-2 mb-2 sm:mb-3">
-        {registers.map((val, i) => (
-          <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: register number i is a fixed, stable identity
-            key={i}
-            className={`rounded border px-1.5 py-1 sm:px-2 sm:py-1.5 transition-colors ${
-              touchedRegs.has(i) ? "border-amber bg-amber/10" : "border-amber-dim/40 bg-chassis/60"
-            }`}
-          >
-            <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/50">
-              R{i}
-            </div>
+      <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+        <div className="grid grid-cols-4 gap-1 sm:gap-1.5 lg:gap-2 mb-2 sm:mb-3">
+          {registers.map((val, i) => (
             <div
-              className={`font-readout text-lg sm:text-xl lg:text-2xl leading-none ${
-                touchedRegs.has(i) ? "text-amber glow-amber" : "text-amber/70"
+              // biome-ignore lint/suspicious/noArrayIndexKey: register number i is a fixed, stable identity
+              key={i}
+              className={`rounded border-2 px-1.5 py-1 sm:px-2 sm:py-1.5 transition-colors ${
+                touchedRegs.has(i) ? "border-amber bg-amber/15" : "border-amber-dim bg-chassis"
               }`}
             >
-              {hexByte(val)}
+              <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/70 font-semibold">
+                R{i}
+              </div>
+              <div
+                className={`font-readout text-lg sm:text-xl lg:text-2xl leading-none ${
+                  touchedRegs.has(i) ? "text-amber glow-amber" : "text-amber/90"
+                }`}
+              >
+                {hexByte(val)}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      <div className="border-t border-amber-dim/30 pt-1.5 sm:pt-2 flex items-center justify-between">
+      <div className="shrink-0 border-t-2 border-amber-dim pt-1.5 sm:pt-2 flex items-center justify-between">
         <div>
-          <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/50">
+          <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/70 font-semibold">
             Program Counter
           </div>
           <div className="font-readout text-2xl sm:text-3xl text-head glow-amber leading-none">
@@ -62,18 +66,18 @@ export default function RegisterBank({ vm }: Props) {
           </div>
         </div>
         <div className="text-right">
-          <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/50">
+          <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/70 font-semibold">
             Next Instruction
           </div>
-          <div className="font-panel text-xs sm:text-sm text-ink/80">
+          <div className="font-panel text-xs sm:text-sm text-ink font-medium">
             {vm ? describeAt(vm.memory, vm.pc) : "-"}
           </div>
         </div>
         <div className="text-right">
-          <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/50">
+          <div className="font-panel text-[9px] sm:text-[10px] uppercase tracking-wider text-ink/70 font-semibold">
             Cycles
           </div>
-          <div className="font-readout text-xl sm:text-2xl text-ink/70 leading-none">
+          <div className="font-readout text-xl sm:text-2xl text-ink leading-none">
             {vm?.cycles ?? 0}
           </div>
         </div>
