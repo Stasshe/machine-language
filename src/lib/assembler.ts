@@ -93,8 +93,8 @@ function assembleOperands(mnemonic: string, operands: string): [number, number] 
       return encode(10, requireReg(m[1]), 0, requireNibble(m[2]));
     }
     case "JUMP": {
-      const m = matchAll(`${REG}\\s*,\\s*${ADDR}`, ops);
-      if (!m) throw new Error("Syntax: JUMP Rn, [XXH]");
+      const m = matchAll(`${REG}\\s*,\\s*${IMM}`, ops);
+      if (!m) throw new Error("Syntax: JUMP Rn, XXH");
       const r = requireReg(m[1]);
       const addr = requireByte(m[2]);
       return encode(11, r, addr >> 4, addr & 0xf);

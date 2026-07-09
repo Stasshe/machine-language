@@ -14,8 +14,8 @@ const DEFAULT_SOURCE = `LOAD R0, 00H
 LOAD R1, [FFH]
 LOAD R2, 01H
 AND R3, R1, R2
-JUMP R3, [0CH]
-STORE R1, [FFH]
+JUMP R3, 0CH
+STORE R0, [FFH]
 HALT`;
 
 function stateLabel(vm: VMState | null, running: boolean): string {

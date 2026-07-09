@@ -13,7 +13,7 @@ const SYNTAX: Record<string, string> = {
   AND: "AND Rn, Rs, Rt",
   XOR: "XOR Rn, Rs, Rt",
   ROTATE: "ROTATE Rn, X",
-  JUMP: "JUMP Rn, [XXH]",
+  JUMP: "JUMP Rn, XXH",
   HALT: "HALT",
 };
 
