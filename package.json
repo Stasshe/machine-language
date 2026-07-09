@@ -12,12 +12,12 @@
   },
   "packageManager": "pnpm@11.9.0",
   "dependencies": {
-    "next": "^16.2.9",
+    "next": "^16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.1",
+    "@biomejs/biome": "^2.5.3",
     "@tailwindcss/postcss": "4.3.2",
     "@types/node": "26.0.1",
     "@types/react": "19.2.17",
