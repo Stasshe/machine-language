@@ -21,8 +21,8 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "仮想計算機シミュレータ",
-  description: "4bit opcode / 4bit*3 operand の仮想CPUをステップ実行するパネル",
+  title: "Virtual CPU Simulator",
+  description: "Step execution panel for a virtual CPU with 4-bit opcodes and 4-bit operands.",
 };
 
 export default function RootLayout({
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="en">
       <body className={`${geistMono.variable} ${vt323.variable} ${rajdhani.variable} antialiased`}>
         {children}
       </body>

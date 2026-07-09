@@ -27,19 +27,19 @@ function matchAll(pattern: string, input: string): RegExpMatchArray | null {
 
 function requireReg(n: string | undefined): number {
   const v = Number.parseInt(n ?? "", 10);
-  if (Number.isNaN(v) || v < 0 || v > 15) throw new Error(`レジスタ番号 R${n} は0-15の範囲外`);
+  if (Number.isNaN(v) || v < 0 || v > 15) throw new Error(`Register R${n} is outside 0-15.`);
   return v;
 }
 
 function requireByte(n: string | undefined): number {
   const v = Number.parseInt(n ?? "", 16);
-  if (Number.isNaN(v) || v < 0 || v > 255) throw new Error(`アドレス/値 ${n}H は00-FFの範囲外`);
+  if (Number.isNaN(v) || v < 0 || v > 255) throw new Error(`Address/value ${n}H is outside 00-FF.`);
   return v;
 }
 
 function requireNibble(n: string | undefined): number {
   const v = Number.parseInt(n ?? "", 10);
-  if (Number.isNaN(v) || v < 0 || v > 15) throw new Error(`シフト量 ${n} は0-15の範囲外`);
+  if (Number.isNaN(v) || v < 0 || v > 15) throw new Error(`Shift amount ${n} is outside 0-15.`);
   return v;
 }
 
@@ -63,18 +63,18 @@ function assembleOperands(mnemonic: string, operands: string): [number, number] 
         const val = requireByte(m[2]);
         return encode(2, r, val >> 4, val & 0xf);
       }
-      throw new Error("書式: LOAD Rn, [XXH]  または  LOAD Rn, XXH");
+      throw new Error("Syntax: LOAD Rn, [XXH] or LOAD Rn, XXH");
     }
     case "STORE": {
       const m = matchAll(`${REG}\\s*,\\s*${ADDR}`, ops);
-      if (!m) throw new Error("書式: STORE Rn, [XXH]");
+      if (!m) throw new Error("Syntax: STORE Rn, [XXH]");
       const r = requireReg(m[1]);
       const addr = requireByte(m[2]);
       return encode(3, r, addr >> 4, addr & 0xf);
     }
     case "MOVE": {
       const m = matchAll(`${REG}\\s*,\\s*${REG}`, ops);
-      if (!m) throw new Error("書式: MOVE Rn, Rm");
+      if (!m) throw new Error("Syntax: MOVE Rn, Rm");
       return encode(4, 0, requireReg(m[1]), requireReg(m[2]));
     }
     case "ADD":
@@ -83,34 +83,35 @@ function assembleOperands(mnemonic: string, operands: string): [number, number] 
     case "AND":
     case "XOR": {
       const m = matchAll(`${REG}\\s*,\\s*${REG}\\s*,\\s*${REG}`, ops);
-      if (!m) throw new Error(`書式: ${mnemonic} Rn, Rs, Rt`);
+      if (!m) throw new Error(`Syntax: ${mnemonic} Rn, Rs, Rt`);
       const opcode = { ADD: 5, ADDF: 6, OR: 7, AND: 8, XOR: 9 }[mnemonic] as number;
       return encode(opcode, requireReg(m[1]), requireReg(m[2]), requireReg(m[3]));
     }
     case "ROTATE": {
       const m = matchAll(`${REG}\\s*,\\s*${NUM}`, ops);
-      if (!m) throw new Error("書式: ROTATE Rn, X  (Xは0-15のシフト量)");
+      if (!m) throw new Error("Syntax: ROTATE Rn, X (X is a 0-15 shift amount)");
       return encode(10, requireReg(m[1]), 0, requireNibble(m[2]));
     }
     case "JUMP": {
       const m = matchAll(`${REG}\\s*,\\s*${ADDR}`, ops);
-      if (!m) throw new Error("書式: JUMP Rn, [XXH]");
+      if (!m) throw new Error("Syntax: JUMP Rn, [XXH]");
       const r = requireReg(m[1]);
       const addr = requireByte(m[2]);
       return encode(11, r, addr >> 4, addr & 0xf);
     }
     case "HALT": {
-      if (ops.length > 0) throw new Error("HALTにオペランドは不要");
+      if (ops.length > 0) throw new Error("HALT does not take operands.");
       return encode(12, 0, 0, 0);
     }
     default:
-      throw new Error(`未知の命令: ${mnemonic}`);
+      throw new Error(`Unknown instruction: ${mnemonic}`);
   }
 }
 
 function stripComment(raw: string): string {
   const idx = raw.search(/(\/\/|#|；|;)/);
-  return idx === -1 ? raw : raw.slice(0, idx);
+  if (idx === -1) return raw;
+  return raw.slice(0, idx);
 }
 
 export function assemble(source: string): AssembleResult {
@@ -126,12 +127,17 @@ export function assemble(source: string): AssembleResult {
       return;
     }
     const spaceIdx = code.search(/\s/);
-    const mnemonic = (spaceIdx === -1 ? code : code.slice(0, spaceIdx)).toUpperCase();
-    const operands = spaceIdx === -1 ? "" : code.slice(spaceIdx + 1);
+    let mnemonicSource = code;
+    let operands = "";
+    if (spaceIdx !== -1) {
+      mnemonicSource = code.slice(0, spaceIdx);
+      operands = code.slice(spaceIdx + 1);
+    }
+    const mnemonic = mnemonicSource.toUpperCase();
 
     try {
       const bytes = assembleOperands(mnemonic, operands);
-      if (address > 0xfe) throw new Error("プログラムが256バイトのメモリに収まらない");
+      if (address > 0xfe) throw new Error("Program does not fit in 256 bytes of memory.");
       memoryPatch.set(address, bytes[0]);
       memoryPatch.set(address + 1, bytes[1]);
       lines.push({ line: idx, text: raw, address, bytes, error: null });

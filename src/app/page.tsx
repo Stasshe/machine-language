@@ -7,15 +7,27 @@ import OpcodeReference from "@/components/OpcodeReference";
 import ProgramEditor from "@/components/ProgramEditor";
 import RegisterBank from "@/components/RegisterBank";
 import { assemble } from "@/lib/assembler";
+import { hexByte } from "@/lib/isa";
 import { createVM, step, type VMState } from "@/lib/vm";
 
-const DEFAULT_SOURCE = `LOAD R0, 00H       // 分岐条件のベース = 0
-LOAD R1, [FFH]     // FFH番地からデータをコピー
-LOAD R2, 01H       // マスクパターン = 01H（最下位ビット判定）
-AND R3, R1, R2      // マスクを実施
-JUMP R3, [0CH]     // 結果が0(偶数)ならHALTへ分岐
-STORE R1, [FFH]    // 奇数のときの処理
+const DEFAULT_SOURCE = `LOAD R0, 00H
+LOAD R1, [FFH]     // Copy input byte
+LOAD R2, 01H       // Mask least significant bit
+AND R3, R1, R2
+JUMP R3, [0CH]     // Jump to HALT when even
+STORE R1, [FFH]    // Keep odd input
 HALT`;
+
+function stateLabel(vm: VMState | null, running: boolean): string {
+  if (vm?.halted) return "HALT";
+  if (running) return "RUN";
+  return "STOP";
+}
+
+function pcLabel(vm: VMState | null): string {
+  if (!vm) return "--H";
+  return `${hexByte(vm.pc)}H`;
+}
 
 export default function Home() {
   const [source, setSource] = useState(DEFAULT_SOURCE);
@@ -34,7 +46,10 @@ export default function Home() {
   }
 
   function handleStep() {
-    setVm((prev) => (prev ? step(prev) : prev));
+    setVm((prev) => {
+      if (!prev) return prev;
+      return step(prev);
+    });
   }
 
   function handleReset() {
@@ -47,7 +62,10 @@ export default function Home() {
   useEffect(() => {
     if (!running || !vm || vm.halted) return;
     const id = setInterval(() => {
-      setVm((prev) => (prev && !prev.halted ? step(prev) : prev));
+      setVm((prev) => {
+        if (!prev || prev.halted) return prev;
+        return step(prev);
+      });
     }, speedMs);
     return () => clearInterval(id);
   }, [running, vm, speedMs]);
@@ -56,23 +74,34 @@ export default function Home() {
     if (vm?.halted) setRunning(false);
   }, [vm?.halted]);
 
+  const runState = stateLabel(vm, running);
+
   return (
-    <main className="min-h-screen lg:h-screen lg:overflow-hidden bg-chassis text-ink px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 flex flex-col">
-      <header className="shrink-0 max-w-[1600px] w-full mx-auto mb-2 flex flex-wrap items-baseline justify-between gap-x-4 border-b-2 border-amber-dim pb-1.5">
-        <div>
-          <h1 className="font-panel uppercase tracking-[0.2em] text-base sm:text-xl lg:text-2xl text-amber font-bold glow-amber">
-            Virtual CPU Panel
-          </h1>
-          <p className="font-panel text-[10px] sm:text-xs text-ink/70 tracking-wide">
-            4bit opcode + 4bit×3 operand ／ 256byte memory ／ step execution
+    <main className="min-h-screen lg:h-screen lg:overflow-hidden bg-chassis text-ink px-2 py-2 sm:px-4 lg:px-5 flex flex-col">
+      <header className="shrink-0 max-w-[1700px] w-full mx-auto mb-2 grid gap-2 border-b border-amber-dim pb-2 md:grid-cols-[1fr_auto] md:items-end">
+        <div className="min-w-0">
+          <h1 className="font-panel text-lg sm:text-xl font-bold text-ink">Virtual CPU Panel</h1>
+          <p className="font-panel text-xs text-ink/70">
+            4-bit opcode / 4-bit operand nibbles / 256-byte memory
           </p>
         </div>
-        <span className="hidden sm:block font-readout text-2xl lg:text-3xl text-amber/70">
-          仮想計算機
-        </span>
+        <dl className="grid grid-cols-3 border border-amber-dim bg-panel text-xs font-panel">
+          <div className="min-w-20 border-r border-amber-dim px-2 py-1">
+            <dt className="text-ink/55">State</dt>
+            <dd className="font-semibold text-amber">{runState}</dd>
+          </div>
+          <div className="min-w-20 border-r border-amber-dim px-2 py-1">
+            <dt className="text-ink/55">PC</dt>
+            <dd className="font-mono font-semibold">{pcLabel(vm)}</dd>
+          </div>
+          <div className="min-w-20 px-2 py-1">
+            <dt className="text-ink/55">Cycles</dt>
+            <dd className="font-mono font-semibold">{vm?.cycles ?? 0}</dd>
+          </div>
+        </dl>
       </header>
 
-      <div className="lg:flex-1 lg:min-h-0 max-w-[1600px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[280px_1fr_260px] lg:grid-rows-[minmax(0,1fr)_auto_auto] gap-2 sm:gap-3 lg:gap-4">
+      <div className="lg:flex-1 lg:min-h-0 max-w-[1700px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[360px_minmax(0,1fr)_330px] lg:grid-rows-[minmax(0,1fr)_auto] gap-2">
         <div className="order-4 md:order-none lg:min-h-0 md:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-span-2">
           <OpcodeReference />
         </div>
@@ -86,7 +115,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="min-h-0 lg:col-start-3 lg:row-span-2 flex flex-col gap-2 sm:gap-3 lg:gap-4">
+        <div className="min-h-0 lg:col-start-3 lg:row-span-2 flex flex-col gap-2">
           <div className="min-h-0 lg:flex-1">
             <RegisterBank vm={vm} />
           </div>

@@ -27,20 +27,29 @@ function SwitchButton({
   active?: boolean;
   children: React.ReactNode;
 }) {
+  let className =
+    "font-panel text-xs font-semibold px-2.5 py-1 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
+  if (active) {
+    className += " bg-amber text-white border-amber";
+  } else {
+    className += " bg-white text-ink border-amber-dim hover:border-amber hover:text-amber";
+  }
+
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`font-panel uppercase tracking-wider text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded border-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-        active
-          ? "bg-amber text-panel border-amber"
-          : "bg-chassis text-ink border-amber-dim hover:border-amber hover:text-amber"
-      }`}
+      className={className}
     >
       {children}
     </button>
   );
+}
+
+function runButtonLabel(running: boolean): string {
+  if (running) return "Pause";
+  return "Run";
 }
 
 export default function ControlPanel({
@@ -56,16 +65,35 @@ export default function ControlPanel({
   vm,
   hasAssembleErrors,
 }: Props) {
+  let status = "Assemble and reset to start.";
+  let statusClassName = "text-ink/60";
+  if (hasAssembleErrors) {
+    status = "Program has assemble errors.";
+    statusClassName = "text-danger font-semibold";
+  } else if (vm?.error) {
+    status = vm.error;
+    statusClassName = "text-danger font-semibold";
+  } else if (vm?.halted) {
+    status = `HALT after ${vm.cycles} cycles.`;
+    statusClassName = "text-amber font-semibold";
+  } else if (running) {
+    status = `Running at cycle ${vm?.cycles ?? 0}.`;
+    statusClassName = "text-ink/80";
+  } else if (vm) {
+    status = `Ready at cycle ${vm.cycles}.`;
+    statusClassName = "text-ink/80";
+  }
+
   return (
-    <div className="bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-1.5 sm:gap-2">
-      <h2 className="font-panel uppercase tracking-widest text-xs text-ink font-semibold">
-        Control Panel
+    <div className="bg-panel border border-amber-dim flex flex-col">
+      <h2 className="border-b border-amber-dim px-2 py-1.5 font-panel text-xs text-ink font-semibold">
+        Control
       </h2>
 
-      <div>
+      <div className="border-b border-amber-dim p-2">
         <label
           htmlFor="ff-input"
-          className="font-panel text-[10px] uppercase tracking-wider text-ink/70 font-semibold block mb-1"
+          className="font-panel text-[10px] text-ink/70 font-semibold block mb-1"
         >
           Memory[FFH] initial value
         </label>
@@ -76,29 +104,29 @@ export default function ControlPanel({
             onChange={(e) => onFfInputChange(e.target.value.toUpperCase().slice(0, 2))}
             placeholder="00"
             maxLength={2}
-            className="w-20 rounded bg-chassis border-2 border-amber-dim text-amber font-readout text-lg px-2 py-0.5 outline-none focus:border-amber"
+            className="w-20 border border-amber-dim bg-white text-amber font-mono text-sm px-2 py-1 outline-none focus:border-amber"
           />
           <span className="font-panel text-ink/70 text-sm">H</span>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+      <div className="flex flex-wrap gap-1 border-b border-amber-dim p-2">
         <SwitchButton onClick={onAssemble}>Assemble &amp; Reset</SwitchButton>
         <SwitchButton onClick={onStep} disabled={!vm || vm.halted}>
           Step
         </SwitchButton>
         <SwitchButton onClick={onRunToggle} disabled={!vm || vm.halted} active={running}>
-          {running ? "Pause" : "Run"}
+          {runButtonLabel(running)}
         </SwitchButton>
         <SwitchButton onClick={onReset} disabled={!vm}>
           Reset
         </SwitchButton>
       </div>
 
-      <div>
+      <div className="border-b border-amber-dim p-2">
         <label
           htmlFor="speed"
-          className="font-panel text-[10px] uppercase tracking-wider text-ink/70 font-semibold flex justify-between mb-1"
+          className="font-panel text-[10px] text-ink/70 font-semibold flex justify-between mb-1"
         >
           <span>Run speed</span>
           <span>{speedMs}ms / step</span>
@@ -115,29 +143,14 @@ export default function ControlPanel({
         />
       </div>
 
-      <div className="border-t-2 border-amber-dim pt-1.5 sm:pt-2 min-h-[2rem]">
-        {hasAssembleErrors && (
-          <p className="font-panel text-xs text-danger font-semibold">
-            プログラムにエラーあり — 下の一覧を確認してください
-          </p>
-        )}
-        {!hasAssembleErrors && vm?.error && (
-          <p className="font-panel text-xs text-danger font-semibold">{vm.error}</p>
-        )}
-        {!hasAssembleErrors && !vm?.error && vm?.halted && (
-          <p className="font-panel text-xs text-amber font-semibold">
-            HALT — 実行終了 ({vm.cycles} cycles)
-          </p>
-        )}
-        {!hasAssembleErrors && !vm?.error && !vm?.halted && vm && (
-          <p className="font-panel text-xs text-ink/80">RUNNING — PC {vm.cycles} cycles</p>
-        )}
-        {!vm && !hasAssembleErrors && (
-          <p className="font-panel text-xs text-ink/60">
-            プログラムを入力し Assemble &amp; Reset で開始
-          </p>
-        )}
-      </div>
+      <table className="w-full text-left font-panel text-xs">
+        <tbody>
+          <tr>
+            <th className="w-16 bg-chassis px-2 py-1 text-[10px] text-ink/60">Status</th>
+            <td className={`px-2 py-1 ${statusClassName}`}>{status}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

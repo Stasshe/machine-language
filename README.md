@@ -1,11 +1,12 @@
-簡潔な Next.js + Tailwind テンプレート。
+# Virtual CPU Simulator
 
-- シンプルなホームページ: [src/app/page.tsx](src/app/page.tsx#L1)
- 
+Next.js app for editing, assembling, and stepping through a small virtual CPU program.
+
+- Program editor with assembled byte listing.
+- Opcode, register, control, and memory views built as dense tables.
+- Memory is 256 bytes; `FFH` can be set as the initial input byte.
+
 ```bash
-npm i -g pnpm
+pnpm install
+pnpm dev
 ```
-
-
-開発: `pnpm install` → `pnpm dev`
-

@@ -18,40 +18,47 @@ const SYNTAX: Record<string, string> = {
 };
 
 function syntaxFor(code: number, mnemonic: string): string {
-  if (mnemonic === "LOAD") return code === 1 ? SYNTAX.LOAD_MEM! : SYNTAX.LOAD_IMM!;
+  if (mnemonic === "LOAD") {
+    if (code === 1) return SYNTAX.LOAD_MEM;
+    return SYNTAX.LOAD_IMM;
+  }
   return SYNTAX[mnemonic] ?? mnemonic;
 }
 
 export default function OpcodeReference() {
   return (
     <details
-      className="lg:h-full flex flex-col bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4"
+      className="lg:h-full flex flex-col bg-panel border border-amber-dim"
       open
     >
-      <summary className="shrink-0 font-panel uppercase tracking-widest text-xs text-ink font-semibold cursor-pointer select-none">
-        Opcode Table — 4bit + 4bit×3
+      <summary className="shrink-0 border-b border-amber-dim px-2 py-1.5 font-panel text-xs font-semibold cursor-pointer select-none">
+        Opcode Table
       </summary>
-      <div className="mt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
-        <div className="flex flex-col font-mono text-[11px]">
-          {OPCODES.map((op) => (
-            <div
-              key={`${op.code}-${op.mnemonic}`}
-              className="border-t border-amber-dim first:border-t-0 py-1"
-            >
-              <div className="flex items-baseline gap-2">
-                <span className="text-amber w-3 shrink-0 font-bold">
+      <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+        <table className="w-full border-collapse text-left text-[11px]">
+          <thead className="sticky top-0 bg-chassis font-panel text-[10px] text-ink/70">
+            <tr>
+              <th className="border-b border-amber-dim px-2 py-1">Hex</th>
+              <th className="border-b border-amber-dim px-2 py-1">Bits</th>
+              <th className="border-b border-amber-dim px-2 py-1">Format</th>
+              <th className="border-b border-amber-dim px-2 py-1">Syntax</th>
+              <th className="border-b border-amber-dim px-2 py-1">Effect</th>
+            </tr>
+          </thead>
+          <tbody className="font-mono">
+            {OPCODES.map((op) => (
+              <tr key={`${op.code}-${op.mnemonic}`} className="border-b border-amber-dim last:border-b-0">
+                <td className="px-2 py-1 font-semibold text-amber">
                   {op.code.toString(16).toUpperCase()}
-                </span>
-                <span className="text-head font-semibold">{syntaxFor(op.code, op.mnemonic)}</span>
-              </div>
-              <p className="text-ink/80 pl-5 leading-snug">
-                {op.what}
-                {op.to}
-                {op.action}
-              </p>
-            </div>
-          ))}
-        </div>
+                </td>
+                <td className="px-2 py-1 text-ink/75">{op.bits}</td>
+                <td className="px-2 py-1 text-ink/75">{op.format}</td>
+                <td className="px-2 py-1 font-semibold text-ink">{syntaxFor(op.code, op.mnemonic)}</td>
+                <td className="px-2 py-1 text-ink/75">{op.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </details>
   );

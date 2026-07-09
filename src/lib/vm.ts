@@ -47,10 +47,10 @@ const OPCODE_NAMES: Record<number, string> = {
 };
 
 export function describeAt(memory: number[], pc: number): string {
-  if (pc > 0xfe) return "(範囲外)";
-  const b0 = memory[pc]!;
+  if (pc > 0xfe) return "(out of range)";
+  const b0 = memory[pc] ?? 0;
   const opcode = b0 >> 4;
-  return OPCODE_NAMES[opcode] ?? `不明(${opcode.toString(16)})`;
+  return OPCODE_NAMES[opcode] ?? `unknown(${opcode.toString(16)})`;
 }
 
 // ADDF is kept bit-identical to ADD: the paper spec names a distinct opcode
@@ -62,8 +62,8 @@ export function step(state: VMState): VMState {
   const memory = state.memory.slice();
   const registers = state.registers.slice();
   const pc = state.pc;
-  const b0 = memory[pc]!;
-  const b1 = memory[pc + 1]!;
+  const b0 = memory[pc] ?? 0;
+  const b1 = memory[pc + 1] ?? 0;
   const opcode = b0 >> 4;
   const n1 = b0 & 0xf;
   const n2 = b1 >> 4;
@@ -76,7 +76,7 @@ export function step(state: VMState): VMState {
   switch (opcode) {
     case 1: {
       const addr = (n2 << 4) | n3;
-      registers[n1] = memory[addr]!;
+      registers[n1] = memory[addr] ?? 0;
       touched.push({ kind: "reg", index: n1 }, { kind: "mem", index: addr });
       break;
     }
@@ -87,38 +87,46 @@ export function step(state: VMState): VMState {
     }
     case 3: {
       const addr = (n2 << 4) | n3;
-      memory[addr] = registers[n1]!;
+      memory[addr] = registers[n1] ?? 0;
       touched.push({ kind: "mem", index: addr });
       break;
     }
     case 4: {
-      registers[n3] = registers[n2]!;
+      registers[n3] = registers[n2] ?? 0;
       touched.push({ kind: "reg", index: n3 });
       break;
     }
     case 5:
     case 6: {
-      registers[n1] = (registers[n2]! + registers[n3]!) & 0xff;
+      const left = registers[n2] ?? 0;
+      const right = registers[n3] ?? 0;
+      registers[n1] = (left + right) & 0xff;
       touched.push({ kind: "reg", index: n1 });
       break;
     }
     case 7: {
-      registers[n1] = registers[n2]! | registers[n3]!;
+      const left = registers[n2] ?? 0;
+      const right = registers[n3] ?? 0;
+      registers[n1] = left | right;
       touched.push({ kind: "reg", index: n1 });
       break;
     }
     case 8: {
-      registers[n1] = registers[n2]! & registers[n3]!;
+      const left = registers[n2] ?? 0;
+      const right = registers[n3] ?? 0;
+      registers[n1] = left & right;
       touched.push({ kind: "reg", index: n1 });
       break;
     }
     case 9: {
-      registers[n1] = registers[n2]! ^ registers[n3]!;
+      const left = registers[n2] ?? 0;
+      const right = registers[n3] ?? 0;
+      registers[n1] = left ^ right;
       touched.push({ kind: "reg", index: n1 });
       break;
     }
     case 10: {
-      registers[n1] = rotateRight8(registers[n1]!, n3);
+      registers[n1] = rotateRight8(registers[n1] ?? 0, n3);
       touched.push({ kind: "reg", index: n1 });
       break;
     }
@@ -133,7 +141,7 @@ export function step(state: VMState): VMState {
       break;
     }
     default: {
-      error = `PC=${pc.toString(16).toUpperCase()}H の不明なオペコード ${opcode.toString(16)}`;
+      error = `Unknown opcode ${opcode.toString(16)} at PC=${pc.toString(16).toUpperCase()}H.`;
       halted = true;
     }
   }
