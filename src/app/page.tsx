@@ -77,7 +77,7 @@ export default function Home() {
   const runState = stateLabel(vm, running);
 
   return (
-    <main className="min-h-screen lg:h-screen lg:overflow-hidden bg-chassis text-ink px-2 py-2 sm:px-4 lg:px-5 flex flex-col">
+    <main className="min-h-screen bg-chassis text-ink px-2 py-2 sm:px-4 lg:px-5 flex flex-col">
       <header className="shrink-0 max-w-[1700px] w-full mx-auto mb-2 grid gap-2 border-b border-amber-dim pb-2 md:grid-cols-[1fr_auto] md:items-end">
         <div className="min-w-0">
           <h1 className="font-panel text-lg sm:text-xl font-bold text-ink">Virtual CPU Panel</h1>
@@ -101,12 +101,12 @@ export default function Home() {
         </dl>
       </header>
 
-      <div className="lg:flex-1 lg:min-h-0 max-w-[1700px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[360px_minmax(0,1fr)_330px] lg:grid-rows-[minmax(0,1fr)_auto] gap-2">
-        <div className="order-4 md:order-none lg:min-h-0 md:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-span-2">
+      <div className="max-w-[1700px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[360px_minmax(0,1fr)_330px] gap-2">
+        <div className="order-4 md:order-none md:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-start-1">
           <OpcodeReference />
         </div>
 
-        <div className="lg:min-h-0 md:col-span-2 lg:col-span-1 lg:col-start-2">
+        <div className="md:col-span-2 lg:col-span-1 lg:col-start-2 lg:row-start-1">
           <ProgramEditor
             value={source}
             onChange={setSource}
@@ -115,28 +115,24 @@ export default function Home() {
           />
         </div>
 
-        <div className="min-h-0 lg:col-start-3 lg:row-span-2 flex flex-col gap-2">
-          <div className="min-h-0 lg:flex-1">
-            <RegisterBank vm={vm} />
-          </div>
-          <div className="shrink-0">
-            <ControlPanel
-              ffInput={ffInput}
-              onFfInputChange={setFfInput}
-              onAssemble={handleAssemble}
-              onStep={handleStep}
-              onRunToggle={() => setRunning((r) => !r)}
-              onReset={handleReset}
-              running={running}
-              speedMs={speedMs}
-              onSpeedChange={setSpeedMs}
-              vm={vm}
-              hasAssembleErrors={!assembleResult.ok}
-            />
-          </div>
+        <div className="lg:col-start-3 lg:row-start-1 flex flex-col gap-2">
+          <RegisterBank vm={vm} />
+          <ControlPanel
+            ffInput={ffInput}
+            onFfInputChange={setFfInput}
+            onAssemble={handleAssemble}
+            onStep={handleStep}
+            onRunToggle={() => setRunning((r) => !r)}
+            onReset={handleReset}
+            running={running}
+            speedMs={speedMs}
+            onSpeedChange={setSpeedMs}
+            vm={vm}
+            hasAssembleErrors={!assembleResult.ok}
+          />
         </div>
 
-        <div className="self-start md:col-span-2 lg:col-span-3">
+        <div className="md:col-span-2 lg:col-span-3 lg:row-start-2">
           <MemoryTape vm={vm} />
         </div>
       </div>

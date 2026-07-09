@@ -51,7 +51,7 @@ export default function ProgramEditor({ value, onChange, assembleResult, current
   const codeLines = assembleResult?.lines.filter(hasAddress) ?? [];
 
   return (
-    <div className="lg:h-full flex flex-col bg-panel border border-amber-dim">
+    <div className="flex flex-col bg-panel border border-amber-dim">
       <div className="shrink-0 flex items-center justify-between gap-2 border-b border-amber-dim px-2 py-1.5">
         <h2 className="font-panel text-xs text-ink font-semibold whitespace-nowrap">Program</h2>
         <span className="hidden md:block font-panel text-[10px] text-ink/60 truncate">
@@ -68,9 +68,9 @@ export default function ProgramEditor({ value, onChange, assembleResult, current
         className="shrink-0 w-full resize-none border-b border-amber-dim bg-white text-ink font-mono text-sm p-2 leading-relaxed outline-none focus:bg-chassis"
       />
 
-      <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+      <div>
         <table className="w-full text-left font-mono text-xs">
-          <thead className="sticky top-0">
+          <thead>
             <tr className="bg-chassis text-ink/70 font-panel text-[10px] font-semibold">
               <th className="border-b border-amber-dim px-2 py-1 w-10">Line</th>
               <th className="px-2 py-1 w-14">Addr</th>

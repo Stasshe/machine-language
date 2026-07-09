@@ -49,13 +49,13 @@ export default function RegisterBank({ vm }: Props) {
   );
 
   return (
-    <div className="h-full flex flex-col bg-panel border border-amber-dim">
+    <div className="flex flex-col bg-panel border border-amber-dim">
       <div className="shrink-0 flex items-center justify-between border-b border-amber-dim px-2 py-1.5">
         <h2 className="font-panel text-xs text-ink font-semibold">Registers</h2>
         <span className="font-panel text-xs text-ink/70">{haltedLabel(vm)}</span>
       </div>
 
-      <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+      <div>
         <table className="w-full border-collapse text-left font-mono text-xs">
           <tbody>
             {rows.map((row, rowIndex) => (

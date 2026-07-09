@@ -28,15 +28,15 @@ function syntaxFor(code: number, mnemonic: string): string {
 export default function OpcodeReference() {
   return (
     <details
-      className="lg:h-full flex flex-col bg-panel border border-amber-dim"
+      className="flex flex-col bg-panel border border-amber-dim"
       open
     >
       <summary className="shrink-0 border-b border-amber-dim px-2 py-1.5 font-panel text-xs font-semibold cursor-pointer select-none">
         Opcode Table
       </summary>
-      <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+      <div>
         <table className="w-full border-collapse text-left text-[11px]">
-          <thead className="sticky top-0 bg-chassis font-panel text-[10px] text-ink/70">
+          <thead className="bg-chassis font-panel text-[10px] text-ink/70">
             <tr>
               <th className="border-b border-amber-dim px-2 py-1">Hex</th>
               <th className="border-b border-amber-dim px-2 py-1">Bits</th>
