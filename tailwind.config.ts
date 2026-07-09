@@ -39,6 +39,15 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        chassis: '#15140f',
+        panel: '#232019',
+        amber: {
+          DEFAULT: '#ffb627',
+          dim: '#6b4f1f',
+        },
+        danger: '#e2503a',
+        head: '#3ddbd9',
+        ink: '#e8dfc8',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -46,8 +55,9 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'Consolas', 'monospace'],
+        readout: ['var(--font-readout)', 'monospace'],
+        panel: ['var(--font-panel)', 'sans-serif'],
       },
       animation: {
         'pulse-slow': 'pulse 2s ease-in-out infinite',
