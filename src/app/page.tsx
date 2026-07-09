@@ -101,7 +101,7 @@ export default function Home() {
         </dl>
       </header>
 
-      <div className="max-w-[1700px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[360px_minmax(0,1fr)_330px] gap-2">
+      <div className="max-w-[1700px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[460px_minmax(0,1fr)_330px] gap-2">
         <div className="order-4 md:order-none md:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-start-1">
           <OpcodeReference />
         </div>
