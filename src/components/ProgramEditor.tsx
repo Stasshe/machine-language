@@ -63,7 +63,7 @@ export default function ProgramEditor({ value, onChange, assembleResult, current
         value={value}
         onChange={(e) => onChange(e.target.value)}
         spellCheck={false}
-        rows={7}
+        rows={10}
         placeholder={"LOAD R0, 00H\nLOAD R1, [FFH]\nAND R3, R1, R2\nJUMP R3, [0CH]\nHALT"}
         className="shrink-0 w-full resize-none border-b border-amber-dim bg-white text-ink font-mono text-sm p-2 leading-relaxed outline-none focus:bg-chassis"
       />
