@@ -11,11 +11,11 @@ import { hexByte } from "@/lib/isa";
 import { createVM, step, type VMState } from "@/lib/vm";
 
 const DEFAULT_SOURCE = `LOAD R0, 00H
-LOAD R1, [FFH]     // Copy input byte
-LOAD R2, 01H       // Mask least significant bit
+LOAD R1, [FFH]
+LOAD R2, 01H
 AND R3, R1, R2
-JUMP R3, [0CH]     // Jump to HALT when even
-STORE R1, [FFH]    // Keep odd input
+JUMP R3, [0CH]
+STORE R1, [FFH]
 HALT`;
 
 function stateLabel(vm: VMState | null, running: boolean): string {
