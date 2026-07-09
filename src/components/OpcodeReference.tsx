@@ -24,29 +24,32 @@ function syntaxFor(code: number, mnemonic: string): string {
 
 export default function OpcodeReference() {
   return (
-    <details className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4" open>
-      <summary className="font-panel uppercase tracking-widest text-xs text-ink/70 cursor-pointer select-none">
+    <details
+      className="lg:h-full flex flex-col bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4"
+      open
+    >
+      <summary className="shrink-0 font-panel uppercase tracking-widest text-xs text-ink/70 cursor-pointer select-none">
         Opcode Table — 4bit + 4bit×3
       </summary>
-      <div className="mt-2 sm:mt-3 flex flex-col gap-1.5 md:grid md:grid-cols-2 md:gap-x-4 md:gap-y-1.5 lg:flex lg:flex-col lg:gap-1.5 font-mono text-xs">
-        {OPCODES.map((op) => (
-          <div
-            key={`${op.code}-${op.mnemonic}`}
-            className="border-t border-amber-dim/15 pt-1.5 first:border-t-0 first:pt-0 md:border-t-0 md:pt-0 lg:border-t lg:first:border-t-0 lg:pt-1.5 lg:first:pt-0"
-          >
-            <div className="flex items-baseline gap-2">
-              <span className="text-amber w-4">{op.code.toString(16).toUpperCase()}</span>
-              <span className="text-ink/40 w-10">{op.bits}</span>
-              <span className="text-ink/40 w-10">{op.format}</span>
-              <span className="text-head">{syntaxFor(op.code, op.mnemonic)}</span>
+      <div className="mt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+        <div className="flex flex-col font-mono text-[11px]">
+          {OPCODES.map((op) => (
+            <div
+              key={`${op.code}-${op.mnemonic}`}
+              className="border-t border-amber-dim/15 first:border-t-0 py-1"
+            >
+              <div className="flex items-baseline gap-2">
+                <span className="text-amber w-3 shrink-0">{op.code.toString(16).toUpperCase()}</span>
+                <span className="text-head">{syntaxFor(op.code, op.mnemonic)}</span>
+              </div>
+              <p className="text-ink/60 pl-5 leading-snug">
+                {op.what}
+                {op.to}
+                {op.action}
+              </p>
             </div>
-            <p className="text-ink/60 pl-6 leading-snug">
-              {op.what}
-              {op.to}
-              {op.action}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </details>
   );

@@ -14,8 +14,8 @@ export default function ProgramEditor({ value, onChange, assembleResult, current
   const codeLines = assembleResult?.lines.filter((l) => l.address !== null) ?? [];
 
   return (
-    <div className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-2 sm:gap-3">
-      <div className="flex items-center justify-between gap-2">
+    <div className="lg:h-full flex flex-col bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4 gap-2">
+      <div className="shrink-0 flex items-center justify-between gap-2">
         <h2 className="font-panel uppercase tracking-widest text-xs text-ink/70 whitespace-nowrap">
           Assembly Program
         </h2>
@@ -28,15 +28,15 @@ export default function ProgramEditor({ value, onChange, assembleResult, current
         value={value}
         onChange={(e) => onChange(e.target.value)}
         spellCheck={false}
-        rows={7}
+        rows={6}
         placeholder={"LOAD R0, 00H\nLOAD R1, [FFH]\nAND R3, R1, R2\nJUMP R3, [0CH]\nHALT"}
-        className="w-full resize-y rounded bg-chassis/70 border border-amber-dim/30 text-ink font-mono text-sm p-2 sm:p-3 leading-relaxed outline-none focus:border-amber/60"
+        className="shrink-0 w-full resize-none rounded bg-chassis/70 border border-amber-dim/30 text-ink font-mono text-sm p-2 sm:p-3 leading-relaxed outline-none focus:border-amber/60"
       />
 
-      <div className="rounded border border-amber-dim/25 overflow-hidden">
+      <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto rounded border border-amber-dim/25">
         <table className="w-full text-left font-mono text-xs">
-          <thead>
-            <tr className="bg-chassis/80 text-ink/50 font-panel uppercase tracking-wider text-[10px]">
+          <thead className="sticky top-0">
+            <tr className="bg-panel text-ink/50 font-panel uppercase tracking-wider text-[10px]">
               <th className="px-2 py-1 w-14">Addr</th>
               <th className="px-2 py-1">Source</th>
               <th className="px-2 py-1 w-20">Machine</th>
