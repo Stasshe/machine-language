@@ -39,7 +39,9 @@ export default function OpcodeReference() {
               className="border-t border-amber-dim/15 first:border-t-0 py-1"
             >
               <div className="flex items-baseline gap-2">
-                <span className="text-amber w-3 shrink-0">{op.code.toString(16).toUpperCase()}</span>
+                <span className="text-amber w-3 shrink-0">
+                  {op.code.toString(16).toUpperCase()}
+                </span>
                 <span className="text-head">{syntaxFor(op.code, op.mnemonic)}</span>
               </div>
               <p className="text-ink/60 pl-5 leading-snug">
