@@ -32,10 +32,10 @@ function SwitchButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`font-panel uppercase tracking-wider text-xs px-2.5 py-1.5 sm:px-3 sm:py-2 rounded border transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
+      className={`font-panel uppercase tracking-wider text-xs font-semibold px-2.5 py-1.5 sm:px-3 sm:py-2 rounded border-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
         active
-          ? "bg-amber text-chassis border-amber"
-          : "bg-chassis/70 text-ink/80 border-amber-dim/40 hover:border-amber/60 hover:text-amber"
+          ? "bg-amber text-panel border-amber"
+          : "bg-chassis text-ink border-amber-dim hover:border-amber hover:text-amber"
       }`}
     >
       {children}
@@ -57,13 +57,15 @@ export default function ControlPanel({
   hasAssembleErrors,
 }: Props) {
   return (
-    <div className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-2 sm:gap-3">
-      <h2 className="font-panel uppercase tracking-widest text-xs text-ink/70">Control Panel</h2>
+    <div className="bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-2 sm:gap-3">
+      <h2 className="font-panel uppercase tracking-widest text-xs text-ink font-semibold">
+        Control Panel
+      </h2>
 
       <div>
         <label
           htmlFor="ff-input"
-          className="font-panel text-[10px] uppercase tracking-wider text-ink/50 block mb-1"
+          className="font-panel text-[10px] uppercase tracking-wider text-ink/70 font-semibold block mb-1"
         >
           Memory[FFH] initial value
         </label>
@@ -74,9 +76,9 @@ export default function ControlPanel({
             onChange={(e) => onFfInputChange(e.target.value.toUpperCase().slice(0, 2))}
             placeholder="00"
             maxLength={2}
-            className="w-20 rounded bg-chassis/70 border border-amber-dim/30 text-amber font-readout text-xl px-2 py-1 outline-none focus:border-amber/60"
+            className="w-20 rounded bg-chassis border-2 border-amber-dim text-amber font-readout text-xl px-2 py-1 outline-none focus:border-amber"
           />
-          <span className="font-panel text-ink/50 text-sm">H</span>
+          <span className="font-panel text-ink/70 text-sm">H</span>
         </div>
       </div>
 
@@ -96,7 +98,7 @@ export default function ControlPanel({
       <div>
         <label
           htmlFor="speed"
-          className="font-panel text-[10px] uppercase tracking-wider text-ink/50 flex justify-between mb-1"
+          className="font-panel text-[10px] uppercase tracking-wider text-ink/70 font-semibold flex justify-between mb-1"
         >
           <span>Run speed</span>
           <span>{speedMs}ms / step</span>
@@ -113,23 +115,25 @@ export default function ControlPanel({
         />
       </div>
 
-      <div className="border-t border-amber-dim/30 pt-2 sm:pt-3 min-h-[2.5rem]">
+      <div className="border-t-2 border-amber-dim pt-2 sm:pt-3 min-h-[2.5rem]">
         {hasAssembleErrors && (
-          <p className="font-panel text-xs text-danger">
+          <p className="font-panel text-xs text-danger font-semibold">
             プログラムにエラーあり — 下の一覧を確認してください
           </p>
         )}
         {!hasAssembleErrors && vm?.error && (
-          <p className="font-panel text-xs text-danger">{vm.error}</p>
+          <p className="font-panel text-xs text-danger font-semibold">{vm.error}</p>
         )}
         {!hasAssembleErrors && !vm?.error && vm?.halted && (
-          <p className="font-panel text-xs text-amber">HALT — 実行終了 ({vm.cycles} cycles)</p>
+          <p className="font-panel text-xs text-amber font-semibold">
+            HALT — 実行終了 ({vm.cycles} cycles)
+          </p>
         )}
         {!hasAssembleErrors && !vm?.error && !vm?.halted && vm && (
-          <p className="font-panel text-xs text-ink/50">RUNNING — PC {vm.cycles} cycles</p>
+          <p className="font-panel text-xs text-ink/80">RUNNING — PC {vm.cycles} cycles</p>
         )}
         {!vm && !hasAssembleErrors && (
-          <p className="font-panel text-xs text-ink/40">
+          <p className="font-panel text-xs text-ink/60">
             プログラムを入力し Assemble &amp; Reset で開始
           </p>
         )}

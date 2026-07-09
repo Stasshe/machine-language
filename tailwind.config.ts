@@ -43,7 +43,7 @@ const config: Config = {
         panel: '#fffdf8',
         amber: {
           DEFAULT: '#a8571e',
-          dim: '#d8c9a8',
+          dim: '#b7a074',
         },
         danger: '#b3261e',
         head: '#0e7490',

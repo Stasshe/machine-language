@@ -58,16 +58,16 @@ export default function Home() {
 
   return (
     <main className="min-h-screen lg:h-screen lg:overflow-hidden bg-chassis text-ink px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 flex flex-col">
-      <header className="shrink-0 max-w-[1600px] w-full mx-auto mb-2 flex flex-wrap items-baseline justify-between gap-x-4 border-b border-amber-dim/40 pb-1.5">
+      <header className="shrink-0 max-w-[1600px] w-full mx-auto mb-2 flex flex-wrap items-baseline justify-between gap-x-4 border-b-2 border-amber-dim pb-1.5">
         <div>
-          <h1 className="font-panel uppercase tracking-[0.2em] text-base sm:text-xl lg:text-2xl text-amber glow-amber">
+          <h1 className="font-panel uppercase tracking-[0.2em] text-base sm:text-xl lg:text-2xl text-amber font-bold glow-amber">
             Virtual CPU Panel
           </h1>
-          <p className="font-panel text-[10px] sm:text-xs text-ink/50 tracking-wide">
+          <p className="font-panel text-[10px] sm:text-xs text-ink/70 tracking-wide">
             4bit opcode + 4bit×3 operand ／ 256byte memory ／ step execution
           </p>
         </div>
-        <span className="hidden sm:block font-readout text-2xl lg:text-3xl text-amber-dim">
+        <span className="hidden sm:block font-readout text-2xl lg:text-3xl text-amber/70">
           仮想計算機
         </span>
       </header>
