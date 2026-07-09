@@ -32,7 +32,7 @@ function SwitchButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`font-panel uppercase tracking-wider text-xs px-3 py-2 rounded border transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
+      className={`font-panel uppercase tracking-wider text-xs px-2.5 py-1.5 sm:px-3 sm:py-2 rounded border transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
         active
           ? "bg-amber text-chassis border-amber"
           : "bg-chassis/70 text-ink/80 border-amber-dim/40 hover:border-amber/60 hover:text-amber"
@@ -57,7 +57,7 @@ export default function ControlPanel({
   hasAssembleErrors,
 }: Props) {
   return (
-    <div className="bg-panel border border-amber-dim/40 rounded p-4 flex flex-col gap-4">
+    <div className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-2 sm:gap-3">
       <h2 className="font-panel uppercase tracking-widest text-xs text-ink/70">Control Panel</h2>
 
       <div>
@@ -80,7 +80,7 @@ export default function ControlPanel({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2">
         <SwitchButton onClick={onAssemble}>Assemble &amp; Reset</SwitchButton>
         <SwitchButton onClick={onStep} disabled={!vm || vm.halted}>
           Step
@@ -113,7 +113,7 @@ export default function ControlPanel({
         />
       </div>
 
-      <div className="border-t border-amber-dim/30 pt-3 min-h-[2.5rem]">
+      <div className="border-t border-amber-dim/30 pt-2 sm:pt-3 min-h-[2.5rem]">
         {hasAssembleErrors && (
           <p className="font-panel text-xs text-danger">
             プログラムにエラーあり — 下の一覧を確認してください

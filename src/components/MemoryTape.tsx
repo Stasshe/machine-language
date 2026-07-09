@@ -27,12 +27,12 @@ export default function MemoryTape({ vm }: Props) {
   }, [pc]);
 
   return (
-    <div className="bg-panel border border-amber-dim/40 rounded p-4">
-      <div className="flex items-center justify-between mb-2">
+    <div className="bg-panel border border-amber-dim/40 rounded p-2 sm:p-3 lg:p-4">
+      <div className="flex items-center justify-between mb-1.5 sm:mb-2">
         <h2 className="font-panel uppercase tracking-widest text-xs text-ink/70">
           Memory Tape — 00H – FFH
         </h2>
-        <span className="font-panel text-[10px] uppercase tracking-wider text-ink/50">
+        <span className="hidden sm:block font-panel text-[10px] uppercase tracking-wider text-ink/50">
           scroll to inspect
         </span>
       </div>
@@ -48,13 +48,13 @@ export default function MemoryTape({ vm }: Props) {
                 // biome-ignore lint/suspicious/noArrayIndexKey: addr is a fixed memory address, not a reorderable index
                 key={addr}
                 ref={addr === pc ? headRef : undefined}
-                className="relative flex-none w-9 flex flex-col items-center justify-center border-r border-amber-dim/20 py-1.5"
+                className="relative flex-none w-7 sm:w-9 flex flex-col items-center justify-center border-r border-amber-dim/20 py-1 sm:py-1.5"
               >
                 {isPc && (
                   <div className="absolute -top-1.5 left-0 right-0 h-0.5 bg-head glow-amber" />
                 )}
                 <span
-                  className={`font-readout text-base leading-none ${
+                  className={`font-readout text-sm sm:text-base leading-none ${
                     isPc
                       ? "text-head glow-amber"
                       : isTouched

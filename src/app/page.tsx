@@ -57,31 +57,39 @@ export default function Home() {
   }, [vm?.halted]);
 
   return (
-    <main className="min-h-screen bg-chassis text-ink px-4 py-6 sm:px-8">
-      <header className="max-w-7xl mx-auto mb-6 flex items-baseline justify-between border-b border-amber-dim/40 pb-4">
+    <main className="min-h-screen bg-chassis text-ink px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4">
+      <header className="max-w-[1600px] mx-auto mb-2 sm:mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-amber-dim/40 pb-2">
         <div>
-          <h1 className="font-panel uppercase tracking-[0.2em] text-xl sm:text-2xl text-amber glow-amber">
+          <h1 className="font-panel uppercase tracking-[0.2em] text-base sm:text-xl lg:text-2xl text-amber glow-amber">
             Virtual CPU Panel
           </h1>
-          <p className="font-panel text-xs text-ink/50 tracking-wide mt-1">
+          <p className="font-panel text-[10px] sm:text-xs text-ink/50 tracking-wide">
             4bit opcode + 4bit×3 operand ／ 256byte memory ／ step execution
           </p>
         </div>
-        <span className="font-readout text-3xl text-amber-dim">仮想計算機</span>
+        <span className="hidden sm:block font-readout text-2xl lg:text-3xl text-amber-dim">
+          仮想計算機
+        </span>
       </header>
 
-      <div className="max-w-7xl mx-auto grid gap-4 lg:grid-cols-[320px_1fr_300px]">
-        <OpcodeReference />
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[280px_1fr_260px] gap-2 sm:gap-3 lg:gap-4">
+        <div className="order-4 md:order-none md:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-span-2">
+          <OpcodeReference />
+        </div>
 
-        <ProgramEditor
-          value={source}
-          onChange={setSource}
-          assembleResult={assembleResult}
-          currentPc={vm?.pc ?? null}
-        />
+        <div className="md:col-span-2 lg:col-span-1 lg:col-start-2">
+          <ProgramEditor
+            value={source}
+            onChange={setSource}
+            assembleResult={assembleResult}
+            currentPc={vm?.pc ?? null}
+          />
+        </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="lg:col-start-3">
           <RegisterBank vm={vm} />
+        </div>
+        <div className="lg:col-start-3">
           <ControlPanel
             ffInput={ffInput}
             onFfInputChange={setFfInput}
@@ -97,7 +105,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="lg:col-span-3">
+        <div className="md:col-span-2 lg:col-span-3">
           <MemoryTape vm={vm} />
         </div>
       </div>
