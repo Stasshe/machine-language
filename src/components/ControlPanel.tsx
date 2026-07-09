@@ -32,7 +32,7 @@ function SwitchButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`font-panel uppercase tracking-wider text-xs font-semibold px-2.5 py-1.5 sm:px-3 sm:py-2 rounded border-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+      className={`font-panel uppercase tracking-wider text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded border-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
         active
           ? "bg-amber text-panel border-amber"
           : "bg-chassis text-ink border-amber-dim hover:border-amber hover:text-amber"
@@ -57,7 +57,7 @@ export default function ControlPanel({
   hasAssembleErrors,
 }: Props) {
   return (
-    <div className="bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-2 sm:gap-3">
+    <div className="bg-panel border-2 border-amber-dim rounded p-2 sm:p-3 lg:p-4 flex flex-col gap-1.5 sm:gap-2">
       <h2 className="font-panel uppercase tracking-widest text-xs text-ink font-semibold">
         Control Panel
       </h2>
@@ -76,7 +76,7 @@ export default function ControlPanel({
             onChange={(e) => onFfInputChange(e.target.value.toUpperCase().slice(0, 2))}
             placeholder="00"
             maxLength={2}
-            className="w-20 rounded bg-chassis border-2 border-amber-dim text-amber font-readout text-xl px-2 py-1 outline-none focus:border-amber"
+            className="w-20 rounded bg-chassis border-2 border-amber-dim text-amber font-readout text-lg px-2 py-0.5 outline-none focus:border-amber"
           />
           <span className="font-panel text-ink/70 text-sm">H</span>
         </div>
@@ -115,7 +115,7 @@ export default function ControlPanel({
         />
       </div>
 
-      <div className="border-t-2 border-amber-dim pt-2 sm:pt-3 min-h-[2.5rem]">
+      <div className="border-t-2 border-amber-dim pt-1.5 sm:pt-2 min-h-[2rem]">
         {hasAssembleErrors && (
           <p className="font-panel text-xs text-danger font-semibold">
             プログラムにエラーあり — 下の一覧を確認してください
